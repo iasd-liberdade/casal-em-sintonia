@@ -8,7 +8,7 @@ export const firebaseConfig = {
   authDomain: 'casal-em-sintonia.firebaseapp.com',
   databaseURL: 'https://casal-em-sintonia-default-rtdb.firebaseio.com',
   projectId: 'casal-em-sintonia',
-  storageBucket: 'casal-em-sintonia.firebasestorage.app',
+  storageBucket: 'casal-em-sintonia.appspot.com',
   messagingSenderId: '611678250131',
   appId: '1:611678250131:web:3005f4075a81a50aecd966'
 };
