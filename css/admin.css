@@ -116,6 +116,8 @@
   font-size: .92rem;
 }
 
+.couple-row.with-action { grid-template-columns: 1fr auto auto 34px; }
+
 .answer-flag { font-size: .72rem; font-weight: 800; padding: 3px 8px; border-radius: 999px; }
 .flag-wait { background: rgba(255, 255, 255, .1); color: var(--ink-mute); }
 .flag-half { background: rgba(255, 200, 87, .18); color: var(--gold); }

@@ -23,6 +23,7 @@
 
     "participants": {
       ".read": "auth != null",
+      ".write": "root.child('admins').child(auth.uid).val() === true",
 
       "$participantId": {
         ".write": "root.child('admins').child(auth.uid).val() === true || (auth != null && (auth.uid === $participantId || !data.child('coupleId').exists() || !root.child('couples').child(data.child('coupleId').val()).exists()) && (data.exists() || root.child('game').child('status').val() === 'WAITING' || !root.child('game').child('status').exists() || root.child('game').child('allowLateJoin').val() === true))",
@@ -48,6 +49,7 @@
 
     "couples": {
       ".read": "auth != null",
+      ".write": "root.child('admins').child(auth.uid).val() === true",
 
       "$coupleId": {
         ".write": "root.child('admins').child(auth.uid).val() === true || (auth != null && !data.exists() && newData.child('memberIds').child(auth.uid).val() === true)",

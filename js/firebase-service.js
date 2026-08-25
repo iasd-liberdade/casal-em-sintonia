@@ -490,8 +490,20 @@ export const adminApi = {
       });
       if (Object.keys(updates).length) await update(ref(db), updates);
     } else {
-      await remove(ref(db, 'couples'));
-      await remove(ref(db, 'participants'));
+      // Apaga casal por casal e pessoa por pessoa: cada caminho é autorizado
+      // individualmente pelas regras, sem depender de escrita no nó inteiro.
+      const [couplesSnap, participantsSnap] = await Promise.all([
+        get(ref(db, 'couples')),
+        get(ref(db, 'participants'))
+      ]);
+      const updates = {};
+      Object.keys(couplesSnap.val() || {}).forEach((coupleId) => {
+        updates[`couples/${coupleId}`] = null;
+      });
+      Object.keys(participantsSnap.val() || {}).forEach((participantId) => {
+        updates[`participants/${participantId}`] = null;
+      });
+      if (Object.keys(updates).length) await update(ref(db), updates);
     }
 
     const game = await getGameOnce();

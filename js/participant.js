@@ -347,14 +347,29 @@ function render() {
       showScreen('final');
       renderFinalScreen();
       break;
-    default:
+    default: {
       timer.stop();
       showScreen('lobby');
-      $('#lobby-title').textContent = 'Casal formado!';
-      $('#lobby-text').innerHTML =
-        state.game.status === GAME_STATUS.READY
-          ? 'O jogo vai começar. Fique de olho na tela do celular.'
-          : `Aguarde o início do jogo. Vocês são <strong>${escapeHtml(state.couple?.coupleName || '')}</strong>.`;
+
+      // Se alguma pergunta já foi jogada, o casal está entre rodadas —
+      // não faz sentido dizer que o jogo "vai começar".
+      const jaComecou = Boolean(state.game.questionNumber || state.game.lastRoundId);
+
+      if (jaComecou) {
+        $('#lobby-emoji').textContent = '⏳';
+        $('#lobby-title').textContent = 'Aguardando a próxima pergunta';
+        $('#lobby-text').innerHTML = 'Fique de olho no telão. A próxima pergunta aparece aqui em instantes.';
+        $('#lobby-badge').textContent = 'Rodada encerrada';
+      } else {
+        $('#lobby-emoji').textContent = '❤️';
+        $('#lobby-title').textContent = 'Casal formado!';
+        $('#lobby-text').innerHTML =
+          state.game.status === GAME_STATUS.READY
+            ? 'O jogo vai começar. Fique de olho na tela do celular.'
+            : `Aguarde o início do jogo. Vocês são <strong>${escapeHtml(state.couple?.coupleName || '')}</strong>.`;
+        $('#lobby-badge').textContent = 'Você está conectado';
+      }
+    }
   }
 }
 

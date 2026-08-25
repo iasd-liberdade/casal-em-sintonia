@@ -126,7 +126,11 @@ As regras garantem que:
 - ninguém responde duas vezes nem muda a resposta já registrada;
 - ninguém vê a resposta dos outros durante a rodada;
 - `answeredAt` é sempre o horário do servidor (`newData.child('answeredAt').val() === now`);
-- pontuação, resultado e estado do jogo só mudam pelo administrador.
+- pontuação, resultado e estado do jogo só mudam pelo administrador;
+- o administrador pode limpar participantes e casais ao reiniciar a partida.
+
+> Sempre que trocar o `database.rules.json`, republique as regras — o console
+> mostra a data da última publicação no topo da aba **Regras**.
 
 ### 7. Cloud Functions (opcional)
 

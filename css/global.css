@@ -218,7 +218,7 @@ a { color: var(--cyan); }
   border-radius: var(--r-md);
   background: var(--surface);
   border: 1px solid var(--stroke);
-  transition: transform var(--t-slow), background var(--t-med), border-color var(--t-med);
+  transition: transform var(--t-rank), background var(--t-rank), border-color var(--t-rank);
 }
 
 .rank-item.is-top1 { background: linear-gradient(100deg, rgba(255, 200, 87, .22), rgba(255, 255, 255, .05)); border-color: rgba(255, 200, 87, .45); }
@@ -232,7 +232,7 @@ a { color: var(--cyan); }
 .rank-delta { font-size: .74rem; font-weight: 800; color: var(--green); }
 
 @keyframes rank-up { 0% { transform: translateY(14px); opacity: .4; } 100% { transform: translateY(0); opacity: 1; } }
-.rank-item.moved-up { animation: rank-up var(--t-slow) both; }
+.rank-item.moved-up { animation: rank-up var(--t-rank) both; }
 
 /* ---------- Feedback ---------- */
 .toast-wrap {

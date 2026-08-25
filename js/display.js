@@ -20,6 +20,7 @@ const state = {
   summary: null,
   watchedRound: null,
   resultsScheduledFor: null,
+  rankingHold: false,
   screen: null,
   rankPage: 0,
   lastLeaderId: null,
@@ -29,6 +30,7 @@ const state = {
 const roundSubs = [];
 let resultsTimeout = null;
 let rankRotation = null;
+let rankHoldTimeout = null;
 
 const displayRanking = createDisplayRanking($('#d-rank-grid'));
 
@@ -48,7 +50,31 @@ function showState(key) {
   clearTimeout(resultsTimeout);
   clearInterval(rankRotation);
 
-  if (key === 'ranking') startRankRotation();
+  if (key === 'ranking') {
+    enterRanking();
+    startRankRotation();
+  }
+}
+
+/**
+ * Ao entrar no ranking, o placar antigo fica visível por 1 segundo e só
+ * então recebe os novos pontos — é assim que dá para ver quem subiu e quem caiu.
+ */
+function enterRanking() {
+  clearTimeout(rankHoldTimeout);
+
+  const grid = $('#d-rank-grid');
+  if (!grid.children.length) {
+    state.rankingHold = false;
+    renderRanking(true);
+    return;
+  }
+
+  state.rankingHold = true;
+  rankHoldTimeout = setTimeout(() => {
+    state.rankingHold = false;
+    renderRanking(true);
+  }, 1000);
 }
 
 /* ---------------------------------------------------------
@@ -139,11 +165,13 @@ function startRankRotation() {
     const perPage = 10;
     const pages = Math.max(1, Math.ceil(Object.keys(state.couples).length / perPage));
     state.rankPage = (state.rankPage + 1) % pages;
-    renderRanking();
+    renderRanking(true);
   }, 8000);
 }
 
-function renderRanking() {
+function renderRanking(force = false) {
+  if (state.rankingHold && !force) return;
+
   const perPage = 10;
   const ranking = displayRanking.render(state.couples, { page: state.rankPage, perPage });
   const pages = Math.max(1, Math.ceil(ranking.length / perPage));

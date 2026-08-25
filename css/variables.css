@@ -54,4 +54,5 @@
   --t-fast: 140ms cubic-bezier(.2, .7, .3, 1);
   --t-med: 280ms cubic-bezier(.2, .7, .3, 1);
   --t-slow: 620ms cubic-bezier(.16, .84, .28, 1);
+  --t-rank: 1000ms cubic-bezier(.22, .9, .25, 1); /* subida/descida no ranking */
 }

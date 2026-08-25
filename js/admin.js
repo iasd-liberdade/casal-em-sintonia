@@ -130,10 +130,11 @@ function renderCouplesLive() {
             ? '<span class="answer-flag flag-half">fora de sintonia</span>'
             : '<span class="answer-flag flag-wait">sem resposta</span>';
         return `
-          <div class="couple-row">
+          <div class="couple-row with-action">
             <span>${escapeHtml(couple.coupleName)}</span>
             <span class="q-opts">${result?.responseTime != null ? formatSeconds(result.responseTime) : '—'}</span>
             ${flag}
+            <button class="icon-btn danger" data-remove-couple="${couple.coupleId}" title="Excluir casal">✕</button>
           </div>`;
       }
 
@@ -146,10 +147,11 @@ function renderCouplesLive() {
           : '<span class="answer-flag flag-wait">aguardando</span>';
 
       return `
-        <div class="couple-row">
+        <div class="couple-row with-action">
           <span>${escapeHtml(couple.coupleName)}</span>
           <span class="q-opts">${couple.score || 0} pts</span>
           ${flag}
+          <button class="icon-btn danger" data-remove-couple="${couple.coupleId}" title="Excluir casal">✕</button>
         </div>`;
     })
     .join('');
@@ -364,6 +366,30 @@ function bindActions() {
         return;
       }
       default:
+    }
+  });
+
+  $('#couples-live').addEventListener('click', async (event) => {
+    const button = event.target.closest('[data-remove-couple]');
+    if (!button) return;
+
+    const coupleId = button.dataset.removeCouple;
+    const couple = state.couples[coupleId];
+
+    const { confirmed } = await confirmDialog({
+      title: 'Excluir este casal?',
+      text: `<strong>${escapeHtml(couple?.coupleName || '')}</strong> sai do jogo e perde os ${
+        couple?.score || 0
+      } pontos. As duas pessoas voltam a poder entrar digitando o nome de novo.`,
+      confirmLabel: 'Excluir casal',
+      danger: true
+    });
+
+    if (confirmed) {
+      run(async () => {
+        await adminApi.removeCouple(coupleId);
+        toast('Casal excluído.', 'ok');
+      }, 'removeCouple');
     }
   });
 

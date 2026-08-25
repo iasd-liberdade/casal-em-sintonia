@@ -126,7 +126,7 @@
   border: 1px solid var(--stroke);
   font-size: clamp(1rem, 1.9vw, 2.1rem);
   font-weight: 700;
-  transition: transform var(--t-slow);
+  transition: transform var(--t-rank), background var(--t-rank), border-color var(--t-rank);
 }
 
 .d-rank-row .pos { font-family: var(--font-display); font-weight: 800; text-align: center; color: var(--ink-soft); }
@@ -134,11 +134,19 @@
 .d-rank-row.top1 { background: linear-gradient(100deg, rgba(255, 200, 87, .26), rgba(255, 255, 255, .05)); border-color: rgba(255, 200, 87, .5); }
 .d-rank-row.top2 { background: linear-gradient(100deg, rgba(226, 232, 240, .2), rgba(255, 255, 255, .04)); }
 .d-rank-row.top3 { background: linear-gradient(100deg, rgba(251, 146, 60, .2), rgba(255, 255, 255, .04)); }
-.d-rank-row.rise { animation: rank-rise var(--t-slow) both; }
-.d-rank-row.fall { animation: rank-fall var(--t-slow) both; }
+.d-rank-row.rise { animation: rank-rise var(--t-rank) both; }
+.d-rank-row.fall { animation: rank-fall var(--t-rank) both; }
 
-@keyframes rank-rise { from { transform: translateY(30px); background: rgba(52, 211, 153, .3); } to { transform: none; } }
-@keyframes rank-fall { from { transform: translateY(-24px); opacity: .6; } to { transform: none; opacity: 1; } }
+@keyframes rank-rise {
+  0% { transform: translateY(42px) scale(.98); background: rgba(52, 211, 153, .34); }
+  60% { background: rgba(52, 211, 153, .2); }
+  100% { transform: none; }
+}
+
+@keyframes rank-fall {
+  0% { transform: translateY(-34px); opacity: .5; }
+  100% { transform: none; opacity: 1; }
+}
 
 .d-page-note { text-align: center; color: var(--ink-mute); font-size: clamp(.8rem, 1.1vw, 1.2rem); font-weight: 700; }
 
