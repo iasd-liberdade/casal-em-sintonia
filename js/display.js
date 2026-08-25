@@ -10,7 +10,7 @@ import {
 } from './firebase-service.js';
 import { GAME_STATUS, countFinishedCouples } from './game.js';
 import { createDisplayRanking, rankCouples } from './ranking.js';
-import { $, escapeHtml, formatPoints, formatSeconds, confetti, connectionBar, sleep, show } from './utils.js';
+import { $, escapeHtml, formatPoints, formatSeconds, confetti, connectionBar, sleep, show, objectToList } from './utils.js';
 
 const state = {
   game: null,
@@ -21,6 +21,10 @@ const state = {
   watchedRound: null,
   resultsScheduledFor: null,
   rankingHold: false,
+  waitingMode: null,
+  knownCouples: new Set(),
+  leavingNames: false,
+  qrDrawn: false,
   screen: null,
   rankPage: 0,
   lastLeaderId: null,
@@ -46,6 +50,8 @@ function showState(key) {
   if (state.screen === key) return;
   state.screen = key;
   Object.entries(states).forEach(([name, node]) => node.classList.toggle('active', name === key));
+
+  if (key !== 'waiting') show($('#d-topbar'), true);
 
   clearTimeout(resultsTimeout);
   clearInterval(rankRotation);
@@ -80,12 +86,122 @@ function enterRanking() {
 /* ---------------------------------------------------------
    Estado 1 — aguardando
    --------------------------------------------------------- */
+/**
+ * A tela de espera tem quatro momentos:
+ * idle   — o organizador ainda não abriu a entrada
+ * join   — QR Code no telão e os casais chegando
+ * roster — jogo iniciado: os nomes em festa
+ * next   — entre uma pergunta e outra
+ */
+function waitingMode() {
+  const game = state.game;
+  if (!game || game.status === GAME_STATUS.IDLE) return 'idle';
+  if (game.questionNumber || game.lastRoundId) return 'next';
+  if (game.status === GAME_STATUS.READY) return 'roster';
+  return 'join';
+}
+
 function renderWaiting() {
-  const couples = Object.values(state.couples);
+  const mode = waitingMode();
+  const trocou = mode !== state.waitingMode;
+  state.waitingMode = mode;
+  $('#d-waiting').dataset.mode = mode;
+  show($('#d-topbar'), mode !== 'next');
+
+  if (mode === 'next') {
+    const proxima = Number(state.game?.questionNumber || 0) + 1;
+    $('#d-next-number').textContent = `Pergunta ${String(proxima).padStart(2, '0')} a caminho`;
+    return;
+  }
+
+  if (mode === 'idle') {
+    limparChips();
+    return;
+  }
+
+  if (mode === 'join') desenharQrCode();
+
+  // Ao iniciar o jogo os nomes entram de novo, um a um, em festa.
+  if (trocou && mode === 'roster') limparChips();
+
+  const couples = objectToList(state.couples, 'coupleId');
   $('#d-couple-count').textContent = couples.length;
-  $('#d-couple-chips').innerHTML = couples
-    .map((couple) => `<span class="couple-chip">${escapeHtml(couple.coupleName)}</span>`)
-    .join('');
+  renderChips(couples, mode === 'roster' && trocou);
+}
+
+function limparChips() {
+  $('#d-couple-chips').innerHTML = '';
+  state.knownCouples.clear();
+}
+
+/** Acrescenta só os casais novos, para não repetir a animação dos antigos. */
+function renderChips(couples, escalonar = false) {
+  const box = $('#d-couple-chips');
+  const atuais = new Set();
+
+  couples.forEach((couple, index) => {
+    atuais.add(couple.coupleId);
+    if (state.knownCouples.has(couple.coupleId)) return;
+
+    const chip = document.createElement('span');
+    chip.className = 'couple-chip is-new';
+    chip.dataset.id = couple.coupleId;
+    if (escalonar) chip.style.animationDelay = `${Math.min(index * 0.16, 3.2)}s`;
+    chip.innerHTML = `<span class="chip-heart">❤</span>${escapeHtml(couple.coupleName)}`;
+    box.appendChild(chip);
+    state.knownCouples.add(couple.coupleId);
+  });
+
+  Array.from(box.children).forEach((chip) => {
+    if (!atuais.has(chip.dataset.id)) {
+      state.knownCouples.delete(chip.dataset.id);
+      chip.remove();
+    }
+  });
+}
+
+function desenharQrCode() {
+  if (state.qrDrawn) return;
+
+  const url = new URL('index.html', window.location.href).href;
+  $('#d-qr-url').textContent = url.replace(/^https?:\/\//, '');
+
+  if (typeof QRCode === 'undefined') return; // sem a biblioteca, fica só o endereço
+
+  state.qrDrawn = true;
+  const box = $('#d-qr');
+  box.innerHTML = '';
+  new QRCode(box, {
+    text: url,
+    width: 320,
+    height: 320,
+    colorDark: '#1E0640',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+
+/** Os nomes saem de cena antes de a pergunta aparecer. */
+function entrarNaPergunta() {
+  if (state.leavingNames) return;
+
+  const saindoDoRoster = state.screen === 'waiting' && ['join', 'roster'].includes(state.waitingMode);
+
+  if (saindoDoRoster && $('#d-couple-chips').children.length) {
+    state.leavingNames = true;
+    $('#d-waiting').classList.add('names-out');
+    setTimeout(() => {
+      $('#d-waiting').classList.remove('names-out');
+      state.leavingNames = false;
+      limparChips();
+      showState('question');
+      renderQuestion();
+    }, 800);
+    return;
+  }
+
+  showState('question');
+  renderQuestion();
 }
 
 /* ---------------------------------------------------------
@@ -229,6 +345,7 @@ function render() {
 
   $('#d-status').textContent =
     {
+      IDLE: 'Aguardando o organizador',
       WAITING: 'Entrada aberta',
       READY: 'Tudo pronto',
       QUESTION_ACTIVE: 'Pergunta no ar',
@@ -240,8 +357,7 @@ function render() {
   switch (game.status) {
     case GAME_STATUS.QUESTION_ACTIVE:
     case GAME_STATUS.QUESTION_LOCKED:
-      showState('question');
-      renderQuestion();
+      entrarNaPergunta();
       break;
 
     case GAME_STATUS.RESULTS:
@@ -316,7 +432,7 @@ async function boot() {
 
   watchCouples((couples) => {
     state.couples = couples;
-    if (state.screen === 'waiting') renderWaiting();
+    if (state.screen === 'waiting' && !state.leavingNames) renderWaiting();
     if (state.screen === 'question') renderQuestion();
     if (state.screen === 'ranking') renderRanking();
   });

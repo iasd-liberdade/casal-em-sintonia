@@ -1,6 +1,7 @@
 import { serverNow } from './firebase-service.js';
 
 export const GAME_STATUS = {
+  IDLE: 'IDLE',
   WAITING: 'WAITING',
   READY: 'READY',
   QUESTION_ACTIVE: 'QUESTION_ACTIVE',
@@ -10,7 +11,8 @@ export const GAME_STATUS = {
 };
 
 export const STATUS_LABEL = {
-  WAITING: 'Aguardando participantes',
+  IDLE: 'Nenhum jogo criado',
+  WAITING: 'Entrada aberta',
   READY: 'Pronto para começar',
   QUESTION_ACTIVE: 'Pergunta no ar',
   QUESTION_LOCKED: 'Tempo encerrado',

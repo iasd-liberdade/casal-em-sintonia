@@ -120,7 +120,7 @@ export function watchConnection(callback) {
    Leituras em tempo real
    --------------------------------------------------------- */
 const DEFAULT_GAME = {
-  status: 'WAITING',
+  status: 'IDLE',
   currentQuestionId: null,
   currentRoundId: null,
   questionStartedAt: null,
@@ -199,7 +199,9 @@ export async function joinGame(name) {
 
   if (!existing.exists()) {
     const game = await getGameOnce();
-    if (game.status !== 'WAITING' && !game.allowLateJoin) throw new AppError('GAME_STARTED');
+    if (game.status !== 'WAITING' && !game.allowLateJoin) {
+      throw new AppError(game.status === 'IDLE' ? 'GAME_NOT_OPEN' : 'GAME_STARTED');
+    }
     await set(participantRef, {
       name: clean,
       status: 'AVAILABLE',
@@ -338,6 +340,14 @@ export const adminApi = {
     if (!snap.exists()) {
       await set(ref(db, 'game'), { ...DEFAULT_GAME, updatedAt: serverTimestamp() });
     }
+  },
+
+  /** Abre a entrada dos casais: limpa a partida anterior e libera o cadastro. */
+  async createGame() {
+    if (APP_CONFIG.useCloudFunctions) return adminCall('createGame');
+
+    await this.resetGame({ keepCouples: false });
+    await update(ref(db, 'game'), { status: 'WAITING', updatedAt: serverTimestamp() });
   },
 
   async startGame() {
@@ -509,6 +519,7 @@ export const adminApi = {
     const game = await getGameOnce();
     await set(ref(db, 'game'), {
       ...DEFAULT_GAME,
+      status: 'IDLE',
       timeLimit: game.timeLimit || APP_CONFIG.defaultTimeLimit,
       updatedAt: serverTimestamp()
     });

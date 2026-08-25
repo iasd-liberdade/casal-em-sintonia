@@ -36,7 +36,7 @@ async function requireAdmin(request) {
 
 async function readGame() {
   const snap = await db.ref('game').get();
-  return snap.val() || { status: 'WAITING', timeLimit: 20 };
+  return snap.val() || { status: 'IDLE', timeLimit: 20 };
 }
 
 function orderedQuestions(questions, onlyActive = true) {
@@ -148,7 +148,9 @@ exports.joinGame = onCall(async (request) => {
 
   const game = await readGame();
   if (game.status !== 'WAITING' && game.allowLateJoin !== true) {
-    throw fail('GAME_STARTED', 'O jogo já começou.');
+    throw game.status === 'IDLE'
+      ? fail('GAME_NOT_OPEN', 'A entrada ainda não foi aberta.')
+      : fail('GAME_STARTED', 'O jogo já começou.');
   }
 
   await participantRef.set({ name, status: 'AVAILABLE', createdAt: TIMESTAMP });
@@ -242,6 +244,12 @@ exports.submitAnswer = onCall(async (request) => {
    Ações administrativas
    --------------------------------------------------------- */
 const actions = {
+  async createGame() {
+    await actions.resetGame({ keepCouples: false });
+    await db.ref('game').update({ status: 'WAITING', updatedAt: TIMESTAMP });
+    return {};
+  },
+
   async startGame() {
     const questions = orderedQuestions((await db.ref('questions').get()).val());
     if (!questions.length) throw fail('NO_QUESTIONS', 'Cadastre ao menos uma pergunta ativa.');
@@ -373,7 +381,7 @@ const actions = {
 
     const game = await readGame();
     await db.ref('game').set({
-      status: 'WAITING',
+      status: 'IDLE',
       currentQuestionId: null,
       currentRoundId: null,
       lastRoundId: null,

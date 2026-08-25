@@ -88,14 +88,22 @@ function renderStatus() {
 
   $('#current-question').textContent = current
     ? `${questions.indexOf(current) + 1}. ${current.text}`
+    : semJogoAinda(status)
+    ? 'Crie um jogo para abrir a entrada dos casais'
     : 'Nenhuma (clique em Iniciar jogo)';
   $('#current-options').textContent = current ? `${current.optionA} · ${current.optionB}` : '—';
 
   const active = status === GAME_STATUS.QUESTION_ACTIVE;
-  $('#btn-start-question').disabled = active || !questions.length;
+  const semJogo = status === GAME_STATUS.IDLE;
+  $('#btn-start-question').disabled = active || semJogo || !questions.length;
   $('#btn-end-question').disabled = !state.game?.currentRoundId || status === GAME_STATUS.RESULTS;
-  $('#btn-next-question').disabled = active;
-  $('#btn-start-game').disabled = active;
+  $('#btn-next-question').disabled = active || semJogo;
+  $('#btn-start-game').disabled = active || semJogo;
+  $('#btn-create-game').disabled = active;
+}
+
+function semJogoAinda(status) {
+  return status === GAME_STATUS.IDLE;
 }
 
 function renderStats() {
@@ -255,6 +263,19 @@ function bindActions() {
   $('#btn-logout').addEventListener('click', async () => {
     await signOutUser();
     window.location.replace('login.html');
+  });
+
+  $('#btn-create-game').addEventListener('click', async () => {
+    const { confirmed } = await confirmDialog({
+      title: 'Criar um jogo novo?',
+      text: 'A entrada é aberta e o QR Code aparece no telão. Participantes, casais e pontuação da partida anterior são apagados — as perguntas continuam salvas.',
+      confirmLabel: 'Criar jogo'
+    });
+    if (!confirmed) return;
+    run(async () => {
+      await adminApi.createGame();
+      toast('Jogo criado. O QR Code já está no telão.', 'ok');
+    }, 'createGame');
   });
 
   $('#btn-start-game').addEventListener('click', () =>

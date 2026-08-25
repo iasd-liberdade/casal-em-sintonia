@@ -318,8 +318,20 @@ function render() {
 
   // Ainda não entrou.
   if (!state.participant) {
-    const blocked = state.game.status !== GAME_STATUS.WAITING && !state.game.allowLateJoin;
-    showScreen(blocked ? 'blocked' : 'name');
+    const aberto = state.game.status === GAME_STATUS.WAITING || state.game.allowLateJoin;
+
+    if (aberto) {
+      showScreen('name');
+      return;
+    }
+
+    const naoAbriu = state.game.status === GAME_STATUS.IDLE;
+    $('#blocked-emoji').textContent = naoAbriu ? '🔒' : '⏳';
+    $('#blocked-title').textContent = naoAbriu ? 'A entrada ainda não abriu' : 'O jogo já começou';
+    $('#blocked-text').textContent = naoAbriu
+      ? 'Assim que o organizador abrir o jogo, esta tela libera sozinha. Pode deixar aberta.'
+      : 'Aguarde a próxima partida. Quem organiza pode liberar novas entradas a qualquer momento.';
+    showScreen('blocked');
     return;
   }
 

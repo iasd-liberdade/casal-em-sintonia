@@ -107,6 +107,7 @@ export const ERROR_MESSAGES = {
   PARTNER_TAKEN: '⚠️ Esta pessoa acabou de ser escolhida por outra. Escolha outro nome.',
   ALREADY_PAIRED: 'Você já está em um casal.',
   GAME_STARTED: '⚠️ O jogo já começou. Aguarde a próxima partida.',
+  GAME_NOT_OPEN: '⏳ A entrada ainda não foi aberta. Aguarde o organizador.',
   ROUND_CLOSED: 'O tempo desta pergunta terminou.',
   ALREADY_ANSWERED: '✓ Sua resposta já foi registrada.',
   NO_COUPLE: 'Forme um casal antes de responder.',

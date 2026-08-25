@@ -18,7 +18,7 @@
 <body>
   <main class="display-page">
 
-    <header class="d-header">
+    <header class="d-header" id="d-topbar">
       <div class="brand" style="align-items:flex-start">
         <span class="brand-mark">Casal em Sintonia</span>
         <span class="brand-tag">o desafio dos casais</span>
@@ -27,16 +27,35 @@
     </header>
 
     <!-- Estado 1 — aguardando -->
-    <section class="d-state active" id="d-waiting">
+    <section class="d-state active" id="d-waiting" data-mode="idle">
+      <div class="hearts" id="d-hearts" aria-hidden="true">
+        <span>❤</span><span>💕</span><span>❤</span><span>💞</span><span>❤</span><span>💕</span><span>❤</span><span>💗</span>
+      </div>
+
       <div class="d-hero">
         <h1 class="d-hero-title">Casal em Sintonia</h1>
         <svg class="pulse-line" viewBox="0 0 320 34" aria-hidden="true">
           <path class="wave-a" d="M0 17 H70 l10 -13 l12 26 l10 -13 h58 l10 -9 l10 18 l10 -9 H320"></path>
           <path class="wave-b" d="M0 17 H70 l10 -13 l12 26 l10 -13 h58 l10 -9 l10 18 l10 -9 H320"></path>
         </svg>
-        <p class="d-hero-sub">Respondam igual. Respondam rápido.</p>
-        <div class="d-count">👥 <span id="d-couple-count">0</span> casais prontos</div>
+        <p class="d-hero-sub" id="d-hero-sub">Respondam igual. Respondam rápido.</p>
+
+        <div class="qr-card" id="d-qr-card">
+          <div class="qr-box" id="d-qr"></div>
+          <div class="qr-caption">Aponte a câmera do celular</div>
+          <div class="qr-url" id="d-qr-url"></div>
+        </div>
+
+        <div class="roster-title" id="d-roster-title">Estes são os casais da noite ❤️</div>
+
+        <div class="d-count" id="d-count-line">👥 <span id="d-couple-count">0</span> casais prontos</div>
         <div class="couple-chips" id="d-couple-chips"></div>
+
+        <div class="next-call" id="d-next-call">
+          <div class="next-call-eyebrow">Atenção, casais</div>
+          <div class="next-call-number" id="d-next-number">Próxima pergunta</div>
+          <div class="next-call-hint">Celular na mão. Ela aparece a qualquer momento.</div>
+        </div>
       </div>
     </section>
 
@@ -86,6 +105,7 @@
 
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script type="module" src="js/display.js"></script>
 </body>
 </html>
