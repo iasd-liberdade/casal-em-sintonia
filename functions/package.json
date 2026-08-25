@@ -1,0 +1,19 @@
+{
+  "name": "casal-em-sintonia-functions",
+  "description": "Cloud Functions do jogo Casal em Sintonia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "serve": "firebase emulators:start --only functions,database",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.3.0",
+    "firebase-functions": "^5.0.1"
+  },
+  "private": true
+}

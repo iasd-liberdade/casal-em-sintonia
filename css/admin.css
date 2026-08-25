@@ -1,0 +1,135 @@
+/* =========================================================
+   Painel administrativo + login
+   ========================================================= */
+.admin-shell { max-width: 1180px; margin: 0 auto; width: 100%; gap: 18px; }
+
+.admin-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 6px;
+}
+
+.admin-top .brand-mark { font-size: 1.6rem; }
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: .8rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: 1px solid var(--stroke-strong);
+  background: var(--surface-strong);
+}
+
+.status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink-mute); }
+.status-pill[data-state="QUESTION_ACTIVE"] .status-dot { background: var(--green); box-shadow: 0 0 0 4px rgba(52, 211, 153, .22); }
+.status-pill[data-state="RESULTS"] .status-dot { background: var(--gold); }
+.status-pill[data-state="FINAL"] .status-dot { background: var(--rose); }
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.control-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.control-grid .span-2 { grid-column: span 2; }
+
+.live-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+
+.stat {
+  padding: 14px;
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, .24);
+  border: 1px solid var(--stroke);
+  text-align: center;
+}
+
+.stat-value { font-family: var(--font-display); font-size: 1.9rem; font-weight: 800; line-height: 1; }
+.stat-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-mute); margin-top: 6px; }
+
+.q-list { display: flex; flex-direction: column; gap: 10px; max-height: 480px; overflow: auto; padding-right: 4px; }
+
+.q-item {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--stroke);
+  background: var(--surface);
+}
+
+.q-item.is-current { border-color: var(--rose); box-shadow: var(--glow-rose); }
+.q-item.is-off { opacity: .5; }
+.q-item.is-done { border-style: dashed; }
+
+.q-order { font-family: var(--font-display); font-weight: 800; color: var(--ink-mute); text-align: center; }
+.q-text { font-weight: 700; }
+.q-opts { font-size: .78rem; color: var(--ink-mute); margin-top: 2px; }
+.q-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.icon-btn {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--stroke);
+  background: rgba(0, 0, 0, .2);
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: .9rem;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.icon-btn:hover { background: var(--surface-strong); border-color: var(--stroke-strong); }
+.icon-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+.couple-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: rgba(0, 0, 0, .18);
+  border: 1px solid var(--stroke);
+  font-size: .92rem;
+}
+
+.answer-flag { font-size: .72rem; font-weight: 800; padding: 3px 8px; border-radius: 999px; }
+.flag-wait { background: rgba(255, 255, 255, .1); color: var(--ink-mute); }
+.flag-half { background: rgba(255, 200, 87, .18); color: var(--gold); }
+.flag-full { background: rgba(52, 211, 153, .18); color: var(--green); }
+
+.settings-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--stroke); }
+.settings-row:last-child { border-bottom: none; }
+
+.switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; }
+.switch input { width: 20px; height: 20px; accent-color: var(--rose); }
+
+.scroll-area { max-height: 340px; overflow: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+
+/* Login */
+.login-wrap { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+.login-card { width: min(420px, 100%); }
+.login-card .brand-mark { font-size: 2rem; }

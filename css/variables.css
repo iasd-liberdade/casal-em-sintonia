@@ -1,0 +1,57 @@
+/* =========================================================
+   CASAL EM SINTONIA — Design tokens
+   Paleta: meia-noite violeta + rosa neon + violeta elétrico
+   ========================================================= */
+:root {
+  /* Base */
+  --midnight: #120327;
+  --midnight-2: #1E0640;
+  --midnight-3: #2B0A57;
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-strong: rgba(255, 255, 255, 0.11);
+  --stroke: rgba(255, 255, 255, 0.14);
+  --stroke-strong: rgba(255, 255, 255, 0.28);
+
+  /* Acentos */
+  --rose: #FF3D7F;
+  --rose-deep: #C81E5B;
+  --violet: #8B5CF6;
+  --violet-deep: #5B21B6;
+  --cyan: #22D3EE;
+  --gold: #FFC857;
+  --green: #34D399;
+  --red: #FB7185;
+
+  /* Texto */
+  --ink: #FFFFFF;
+  --ink-soft: rgba(255, 255, 255, 0.72);
+  --ink-mute: rgba(255, 255, 255, 0.48);
+
+  /* Gradientes */
+  --grad-bg: radial-gradient(120% 90% at 15% 0%, #3A0B6B 0%, #1B0540 45%, #0E0220 100%);
+  --grad-rose: linear-gradient(135deg, #FF6BA3 0%, #FF3D7F 45%, #C81E5B 100%);
+  --grad-violet: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 45%, #5B21B6 100%);
+  --grad-gold: linear-gradient(135deg, #FFE29A 0%, #FFC857 50%, #E39A18 100%);
+  --grad-cyan: linear-gradient(135deg, #7DE9FB 0%, #22D3EE 50%, #0E7490 100%);
+
+  /* Tipografia */
+  --font-display: 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Raios e sombras */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 34px;
+  --shadow-soft: 0 18px 40px rgba(6, 0, 20, 0.45);
+  --shadow-hard: 0 26px 60px rgba(6, 0, 20, 0.6);
+  --glow-rose: 0 0 0 1px rgba(255, 61, 127, 0.35), 0 16px 44px rgba(255, 61, 127, 0.32);
+  --glow-violet: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 16px 44px rgba(139, 92, 246, 0.32);
+
+  /* Ritmo */
+  --gap: 16px;
+  --pad-page: 20px;
+  --t-fast: 140ms cubic-bezier(.2, .7, .3, 1);
+  --t-med: 280ms cubic-bezier(.2, .7, .3, 1);
+  --t-slow: 620ms cubic-bezier(.16, .84, .28, 1);
+}

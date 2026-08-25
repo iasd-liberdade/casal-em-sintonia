@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#120327">
+  <title>Telão · Casal em Sintonia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/display.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <main class="display-page">
+
+    <header class="d-header">
+      <div class="brand" style="align-items:flex-start">
+        <span class="brand-mark">Casal em Sintonia</span>
+        <span class="brand-tag">o desafio dos casais</span>
+      </div>
+      <span class="badge badge-live" id="d-status">Aguardando</span>
+    </header>
+
+    <!-- Estado 1 — aguardando -->
+    <section class="d-state active" id="d-waiting">
+      <div class="d-hero">
+        <h1 class="d-hero-title">Casal em Sintonia</h1>
+        <svg class="pulse-line" viewBox="0 0 320 34" aria-hidden="true">
+          <path class="wave-a" d="M0 17 H70 l10 -13 l12 26 l10 -13 h58 l10 -9 l10 18 l10 -9 H320"></path>
+          <path class="wave-b" d="M0 17 H70 l10 -13 l12 26 l10 -13 h58 l10 -9 l10 18 l10 -9 H320"></path>
+        </svg>
+        <p class="d-hero-sub">Respondam igual. Respondam rápido.</p>
+        <div class="d-count">👥 <span id="d-couple-count">0</span> casais prontos</div>
+        <div class="couple-chips" id="d-couple-chips"></div>
+      </div>
+    </section>
+
+    <!-- Estado 2 — pergunta -->
+    <section class="d-state" id="d-question">
+      <div class="d-qnum eyebrow" id="d-qnum">Pergunta 1</div>
+      <h2 class="d-question" id="d-question-text">—</h2>
+
+      <div class="d-options">
+        <div class="d-option a" id="d-option-a">ELE</div>
+        <div class="d-option b" id="d-option-b">ELA</div>
+      </div>
+
+      <div class="d-progress">
+        <div class="d-progress-bar"><div class="d-progress-fill" id="d-progress-fill"></div></div>
+        <div class="d-progress-text">
+          <span id="d-progress-label">0 de 0 casais finalizaram</span>
+          <span class="d-clock" id="d-clock">20</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estado 3 — resultado da rodada -->
+    <section class="d-state" id="d-results">
+      <h2 class="d-result-title">Resultado!</h2>
+      <div class="d-sync-count" id="d-sync-count">❤️ 0 casais em sintonia</div>
+      <div class="podium" id="d-podium"></div>
+    </section>
+
+    <!-- Estado 4 — ranking geral -->
+    <section class="d-state" id="d-ranking">
+      <h2 class="d-rank-title">🏆 Ranking dos casais</h2>
+      <div class="leader-flash hidden" id="d-leader-flash"></div>
+      <div class="d-rank-grid" id="d-rank-grid"></div>
+      <div class="d-page-note" id="d-rank-note"></div>
+    </section>
+
+    <!-- Estado 5 — final -->
+    <section class="d-state" id="d-final">
+      <div class="final-reveal">
+        <div class="final-crown" id="d-final-emoji">🏆</div>
+        <div class="final-label" id="d-final-label">Resultado final</div>
+        <h2 class="final-name" id="d-final-name">—</h2>
+        <div class="final-points" id="d-final-points"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="js/display.js"></script>
+</body>
+</html>

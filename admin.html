@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#120327">
+  <title>Painel · Casal em Sintonia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <main class="page admin-shell stack" id="admin-root" hidden>
+
+    <header class="admin-top">
+      <div class="brand" style="align-items:flex-start">
+        <span class="brand-mark">Casal em Sintonia</span>
+        <span class="brand-tag">painel do organizador</span>
+      </div>
+      <div class="row" style="gap:10px;flex-wrap:wrap">
+        <span class="status-pill" id="status-pill" data-state="WAITING">
+          <span class="status-dot"></span>
+          <span id="status-text">Aguardando participantes</span>
+        </span>
+        <a class="btn btn-sm btn-ghost" href="display.html" target="_blank" rel="noopener">Abrir telão ↗</a>
+        <button class="btn btn-sm btn-ghost" id="btn-logout">Sair</button>
+      </div>
+    </header>
+
+    <div class="admin-grid">
+
+      <!-- Coluna esquerda -->
+      <div class="stack">
+
+        <section class="card">
+          <div class="panel-title">
+            Controle do jogo
+            <span class="badge" id="round-clock">—</span>
+          </div>
+
+          <div class="live-stats">
+            <div class="stat">
+              <div class="stat-value" id="stat-couples">0</div>
+              <div class="stat-label">casais</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="stat-waiting">0</div>
+              <div class="stat-label">sem par</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="stat-finished">0</div>
+              <div class="stat-label">responderam</div>
+            </div>
+          </div>
+
+          <div class="card card-tight" style="margin-bottom:14px">
+            <div class="eyebrow">Pergunta selecionada</div>
+            <div id="current-question" style="font-weight:700;margin-top:4px">Nenhuma</div>
+            <div class="q-opts" id="current-options">—</div>
+          </div>
+
+          <div class="control-grid">
+            <button class="btn btn-violet" id="btn-start-game">▶ Iniciar jogo</button>
+            <button class="btn btn-primary" id="btn-start-question">▶ Iniciar pergunta</button>
+            <button class="btn" id="btn-end-question">⏹ Encerrar pergunta</button>
+            <button class="btn" id="btn-next-question">➡ Próxima pergunta</button>
+            <button class="btn btn-gold" id="btn-show-ranking">🏆 Mostrar ranking</button>
+            <button class="btn" id="btn-final">🎬 Encerrar jogo</button>
+            <button class="btn btn-danger span-2" id="btn-reset">🔄 Reiniciar partida</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="panel-title">
+            Casais na rodada
+            <span class="badge badge-off" id="round-label">sem rodada ativa</span>
+          </div>
+          <div class="scroll-area" id="couples-live"></div>
+        </section>
+
+        <section class="card">
+          <div class="panel-title">Configurações</div>
+
+          <div class="settings-row">
+            <div>
+              <strong>Tempo por pergunta</strong>
+              <div class="q-opts">Ao acabar, as respostas são bloqueadas.</div>
+            </div>
+            <div class="row" style="gap:8px">
+              <input class="input" id="input-time-limit" type="number" min="5" max="120" step="1" style="width:92px">
+              <button class="btn btn-sm" id="btn-save-time">Salvar</button>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <strong>Encerrar sozinho no fim do tempo</strong>
+              <div class="q-opts">Apura a rodada assim que o cronômetro zera.</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="chk-autoend" checked></label>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <strong>Aceitar quem chegou depois</strong>
+              <div class="q-opts">Libera novas entradas com o jogo em andamento.</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="chk-latejoin"></label>
+          </div>
+        </section>
+      </div>
+
+      <!-- Coluna direita -->
+      <div class="stack">
+
+        <section class="card">
+          <div class="panel-title">
+            Perguntas
+            <span class="row" style="gap:8px">
+              <button class="btn btn-sm" id="btn-seed">Carregar 20 perguntas</button>
+              <button class="btn btn-sm btn-primary" id="btn-new-question">+ Nova</button>
+            </span>
+          </div>
+          <div class="q-list" id="question-list"></div>
+        </section>
+
+        <section class="card">
+          <div class="panel-title">
+            Ranking ao vivo
+            <span class="badge badge-off" id="ranking-count">0 casais</span>
+          </div>
+          <ul class="rank-list" id="admin-ranking"></ul>
+        </section>
+
+        <section class="card">
+          <div class="panel-title">Participantes sem par</div>
+          <div class="scroll-area" id="waiting-list"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="page" id="admin-loading">
+    <div class="waiting-box" style="margin:auto;display:grid;gap:14px;text-align:center">
+      <div class="spinner"></div>
+      <p>Verificando acesso…</p>
+    </div>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

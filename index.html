@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#120327">
+  <title>Casal em Sintonia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/participant.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <main class="page participant stack">
+
+    <!-- Cabeçalho -->
+    <header class="p-header" id="p-header">
+      <div class="brand">
+        <span class="brand-mark">Casal em Sintonia</span>
+        <span class="brand-tag">o desafio dos casais</span>
+      </div>
+      <svg class="pulse-line" id="pulse-line" viewBox="0 0 320 34" aria-hidden="true">
+        <path class="wave-a" d="M0 17 H70 l10 -13 l12 26 l10 -13 h58 l10 -9 l10 18 l10 -9 H320"></path>
+        <path class="wave-b" d="M0 17 H70 l10 -13 l12 26 l10 -13 h58 l10 -9 l10 18 l10 -9 H320"></path>
+      </svg>
+    </header>
+
+    <!-- Faixa do casal -->
+    <section class="couple-strip hidden" id="couple-strip">
+      <div>
+        <div class="eyebrow">Seu casal</div>
+        <div class="cs-name" id="cs-name">—</div>
+      </div>
+      <div class="center">
+        <div class="cs-score" id="cs-score">0</div>
+        <div class="eyebrow">pontos</div>
+      </div>
+    </section>
+
+    <!-- 0. Carregando -->
+    <section class="screen active" id="screen-loading">
+      <div class="waiting-box">
+        <div class="spinner"></div>
+        <p class="hero-copy">Conectando<span class="dots"></span></p>
+      </div>
+    </section>
+
+    <!-- 1. Entrada -->
+    <section class="screen" id="screen-name">
+      <div class="card stack">
+        <h2>Bem-vindo!</h2>
+        <p class="hero-copy">Cada pessoa entra pelo próprio celular. Depois vocês formam o casal.</p>
+        <div class="field">
+          <label class="label" for="input-name">Digite seu nome</label>
+          <input class="input" id="input-name" maxlength="40" autocomplete="given-name" placeholder="Ex.: Brenno">
+        </div>
+        <button class="btn btn-primary btn-block" id="btn-join">Entrar</button>
+      </div>
+      <p class="tiny-print">Use o nome pelo qual seu par vai te reconhecer na lista.</p>
+    </section>
+
+    <!-- 2. Escolha do parceiro -->
+    <section class="screen" id="screen-partner">
+      <div class="stack">
+        <div class="center stack" style="gap:6px">
+          <h2>❤️ Escolha seu par</h2>
+          <p class="hero-copy">Toque no nome da pessoa com quem você vai jogar.</p>
+        </div>
+        <div class="partner-list" id="partner-list"></div>
+        <div class="card card-tight center">
+          <strong>Ou fique parado aqui.</strong>
+          <p class="hero-copy" style="margin-top:6px">Você já está na lista como <strong id="my-name-echo">—</strong>. Se seu par escolher você primeiro, o casal se forma sozinho.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Casal formado, aguardando o jogo -->
+    <section class="screen" id="screen-lobby">
+      <div class="waiting-box card">
+        <div class="result-emoji">❤️</div>
+        <h2 id="lobby-title">Casal formado!</h2>
+        <p class="hero-copy" id="lobby-text">Aguarde o início do jogo. Deixe o celular com a tela ligada.</p>
+        <div class="badge badge-live">Você está conectado</div>
+      </div>
+      <p class="tiny-print">Homens de um lado, mulheres do outro: ninguém pode ver a tela do par.</p>
+    </section>
+
+    <!-- 4. Bloqueado (jogo já começou) -->
+    <section class="screen" id="screen-blocked">
+      <div class="waiting-box card">
+        <div class="result-emoji">⏳</div>
+        <h2>O jogo já começou</h2>
+        <p class="hero-copy">Aguarde a próxima partida. Quem organiza pode liberar novas entradas a qualquer momento.</p>
+      </div>
+    </section>
+
+    <!-- 5. Pergunta -->
+    <section class="screen" id="screen-question">
+      <div class="stack" style="gap:10px">
+        <div class="q-index eyebrow" id="q-index">Pergunta 1</div>
+        <h2 class="question-text" id="q-text">—</h2>
+        <div class="timer-wrap">
+          <div class="timer-bar"><div class="timer-fill" id="timer-fill"></div></div>
+          <div class="timer-text">
+            <span id="timer-label">Responda rápido!</span>
+            <span id="timer-value">20s</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="options" id="options">
+        <button class="option-btn option-a" data-option="A">
+          <span class="option-check">✓</span>
+          <span class="option-label">ELE</span>
+        </button>
+        <button class="option-btn option-b" data-option="B">
+          <span class="option-check">✓</span>
+          <span class="option-label">ELA</span>
+        </button>
+      </div>
+
+      <div class="answered-note hidden" id="answered-note">
+        <strong>✓ Resposta registrada</strong>
+        <span>Você escolheu <strong id="chosen-label">—</strong></span>
+        <span class="partner-status" id="partner-status">Aguardando seu par responder<span class="dots"></span></span>
+      </div>
+    </section>
+
+    <!-- 6. Resultado da rodada -->
+    <section class="screen" id="screen-result">
+      <div class="result-hero" id="result-hero">
+        <div class="result-emoji" id="result-emoji">❤️</div>
+        <h2 class="result-title" id="result-title">Em sintonia!</h2>
+        <p class="result-sub" id="result-sub">Vocês pensaram igual.</p>
+        <div class="result-points" id="result-points">+0</div>
+        <p class="result-sub" id="result-position"></p>
+      </div>
+      <div class="card card-tight center">
+        <div class="eyebrow">Sua pontuação total</div>
+        <div class="cs-score" id="result-total">0</div>
+      </div>
+      <p class="tiny-print">Aguarde a próxima pergunta aparecer aqui.</p>
+    </section>
+
+    <!-- 7. Fim de jogo -->
+    <section class="screen" id="screen-final">
+      <div class="result-hero sync">
+        <div class="result-emoji" id="final-emoji">🏆</div>
+        <h2 class="result-title" id="final-title">Fim de jogo!</h2>
+        <p class="result-sub" id="final-sub">Obrigado por jogar.</p>
+        <div class="result-points" id="final-points">0</div>
+        <p class="result-sub" id="final-position"></p>
+      </div>
+      <ul class="rank-list" id="final-ranking"></ul>
+    </section>
+
+  </main>
+
+  <script type="module" src="js/participant.js"></script>
+</body>
+</html>

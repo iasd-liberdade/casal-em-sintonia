@@ -1,0 +1,160 @@
+/* =========================================================
+   Telão — pensado para 1920x1080, legível de longe
+   Escala com clamp em vw para funcionar em qualquer projetor
+   ========================================================= */
+.display-page {
+  min-height: 100dvh;
+  padding: clamp(20px, 2.6vw, 46px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.6vw, 28px);
+  overflow: hidden;
+}
+
+.d-state { display: none; flex: 1; flex-direction: column; gap: clamp(14px, 1.8vw, 30px); }
+.d-state.active { display: flex; animation: d-in var(--t-slow) both; }
+
+@keyframes d-in { from { opacity: 0; transform: translateY(18px) scale(.99); } to { opacity: 1; transform: none; } }
+
+.d-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.d-header .brand-mark { font-size: clamp(1.6rem, 2.4vw, 2.6rem); }
+.d-header .badge { font-size: clamp(.8rem, 1.05vw, 1.1rem); padding: 10px 18px; }
+
+/* Estado 1 — aguardando */
+.d-hero { display: grid; place-items: center; gap: clamp(12px, 1.5vw, 26px); text-align: center; flex: 1; }
+.d-hero-title { font-size: clamp(3rem, 8.6vw, 8.4rem); line-height: .92; background: var(--grad-rose); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.d-hero-sub { font-size: clamp(1rem, 2vw, 2rem); letter-spacing: .3em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
+.d-hero .pulse-line { max-width: min(620px, 60vw); height: clamp(40px, 5vw, 80px); }
+
+.d-count { font-family: var(--font-display); font-size: clamp(1.4rem, 2.6vw, 2.6rem); font-weight: 800; }
+.d-count span { color: var(--rose); }
+
+.couple-chips { display: flex; flex-wrap: wrap; gap: clamp(8px, .8vw, 16px); justify-content: center; max-height: 32vh; overflow: hidden; }
+
+.couple-chip {
+  padding: clamp(8px, .8vw, 14px) clamp(14px, 1.3vw, 24px);
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  font-weight: 700;
+  font-size: clamp(.9rem, 1.25vw, 1.5rem);
+  animation: chip-in var(--t-med) both;
+}
+
+@keyframes chip-in { from { transform: scale(.85); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Estado 2 — pergunta ativa */
+.d-question { text-align: center; font-size: clamp(2.4rem, 6.6vw, 6.4rem); line-height: 1.02; }
+.d-qnum { text-align: center; font-size: clamp(.9rem, 1.4vw, 1.5rem); letter-spacing: .34em; }
+
+.d-options { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 34px); flex: 1; }
+
+.d-option {
+  border-radius: clamp(20px, 2.4vw, 40px);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6vw, 6rem);
+  padding: clamp(16px, 2vw, 40px);
+  text-align: center;
+}
+
+.d-option.a { background: var(--grad-violet); box-shadow: var(--glow-violet); }
+.d-option.b { background: var(--grad-rose); box-shadow: var(--glow-rose); }
+
+.d-progress { display: flex; flex-direction: column; gap: 10px; }
+.d-progress-bar { height: clamp(14px, 1.4vw, 24px); border-radius: 999px; background: rgba(0, 0, 0, .38); overflow: hidden; }
+.d-progress-fill { height: 100%; width: 0%; background: var(--grad-cyan); transition: width var(--t-med); }
+.d-progress-text { display: flex; justify-content: space-between; font-size: clamp(1rem, 1.7vw, 1.8rem); font-weight: 800; }
+
+.d-clock {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 5.4rem);
+  font-weight: 800;
+  min-width: 3.5ch;
+  text-align: center;
+}
+
+.d-clock.warn { color: var(--gold); }
+.d-clock.danger { color: var(--rose); animation: clock-pulse .6s ease-in-out infinite; }
+@keyframes clock-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+/* Estado 3 — resultado */
+.d-result-title { text-align: center; font-size: clamp(2.6rem, 6.4vw, 6rem); }
+.d-sync-count { text-align: center; font-size: clamp(1.4rem, 3vw, 3rem); color: var(--green); font-weight: 800; font-family: var(--font-display); }
+
+.podium { display: flex; flex-direction: column; gap: clamp(10px, 1.2vw, 20px); align-items: stretch; }
+
+.podium-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 28px);
+  padding: clamp(12px, 1.4vw, 24px) clamp(16px, 2vw, 34px);
+  border-radius: clamp(16px, 1.8vw, 28px);
+  border: 1px solid var(--stroke);
+  font-size: clamp(1.2rem, 2.4vw, 2.6rem);
+  font-weight: 800;
+  font-family: var(--font-display);
+  animation: podium-in var(--t-slow) both;
+}
+
+.podium-row.p1 { background: linear-gradient(100deg, rgba(255, 200, 87, .3), rgba(255, 255, 255, .05)); border-color: rgba(255, 200, 87, .5); }
+.podium-row.p2 { background: linear-gradient(100deg, rgba(226, 232, 240, .22), rgba(255, 255, 255, .04)); }
+.podium-row.p3 { background: linear-gradient(100deg, rgba(251, 146, 60, .22), rgba(255, 255, 255, .04)); }
+.podium-medal { font-size: clamp(1.6rem, 3.2vw, 3.4rem); }
+.podium-points { color: var(--gold); }
+.podium-time { font-family: var(--font-body); font-size: clamp(.8rem, 1.1vw, 1.1rem); color: var(--ink-mute); font-weight: 700; }
+
+@keyframes podium-in { from { transform: translateX(-40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Ranking no telão */
+.d-rank-title { text-align: center; font-size: clamp(2rem, 4.6vw, 4.4rem); }
+
+.d-rank-grid { display: grid; gap: clamp(8px, .9vw, 16px); grid-template-columns: 1fr; flex: 1; align-content: start; }
+.d-rank-grid.two-col { grid-template-columns: 1fr 1fr; column-gap: clamp(16px, 2vw, 34px); }
+
+.d-rank-row {
+  display: grid;
+  grid-template-columns: clamp(46px, 4vw, 80px) 1fr auto;
+  align-items: center;
+  gap: clamp(10px, 1.2vw, 22px);
+  padding: clamp(8px, .9vw, 16px) clamp(12px, 1.4vw, 24px);
+  border-radius: clamp(12px, 1.4vw, 20px);
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  font-size: clamp(1rem, 1.9vw, 2.1rem);
+  font-weight: 700;
+  transition: transform var(--t-slow);
+}
+
+.d-rank-row .pos { font-family: var(--font-display); font-weight: 800; text-align: center; color: var(--ink-soft); }
+.d-rank-row .pts { font-family: var(--font-display); font-weight: 800; color: var(--gold); }
+.d-rank-row.top1 { background: linear-gradient(100deg, rgba(255, 200, 87, .26), rgba(255, 255, 255, .05)); border-color: rgba(255, 200, 87, .5); }
+.d-rank-row.top2 { background: linear-gradient(100deg, rgba(226, 232, 240, .2), rgba(255, 255, 255, .04)); }
+.d-rank-row.top3 { background: linear-gradient(100deg, rgba(251, 146, 60, .2), rgba(255, 255, 255, .04)); }
+.d-rank-row.rise { animation: rank-rise var(--t-slow) both; }
+.d-rank-row.fall { animation: rank-fall var(--t-slow) both; }
+
+@keyframes rank-rise { from { transform: translateY(30px); background: rgba(52, 211, 153, .3); } to { transform: none; } }
+@keyframes rank-fall { from { transform: translateY(-24px); opacity: .6; } to { transform: none; opacity: 1; } }
+
+.d-page-note { text-align: center; color: var(--ink-mute); font-size: clamp(.8rem, 1.1vw, 1.2rem); font-weight: 700; }
+
+.leader-flash {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.6vw, 2.6rem);
+  color: var(--gold);
+  animation: flash 1.2s ease-in-out 3;
+}
+
+@keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+/* Estado final */
+.final-reveal { display: grid; place-items: center; gap: clamp(10px, 1.4vw, 24px); flex: 1; text-align: center; }
+.final-label { font-size: clamp(1.2rem, 2.4vw, 2.4rem); letter-spacing: .3em; text-transform: uppercase; color: var(--ink-soft); font-weight: 800; }
+.final-name { font-size: clamp(2.6rem, 7.4vw, 7rem); line-height: 1; }
+.final-points { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 4rem); color: var(--gold); font-weight: 800; }
+.final-crown { font-size: clamp(3rem, 7vw, 7rem); animation: bob 2s ease-in-out infinite; }

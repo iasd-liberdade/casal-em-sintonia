@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#120327">
+  <title>Entrar · Casal em Sintonia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <main class="login-wrap">
+    <div class="card login-card stack" id="login-form">
+      <div class="brand" style="margin-bottom:6px">
+        <span class="brand-mark">Casal em Sintonia</span>
+        <span class="brand-tag">painel do organizador</span>
+      </div>
+
+      <div class="field">
+        <label class="label" for="email">E-mail</label>
+        <input class="input" id="email" type="email" autocomplete="username" placeholder="voce@igreja.com">
+      </div>
+
+      <div class="field">
+        <label class="label" for="password">Senha</label>
+        <input class="input" id="password" type="password" autocomplete="current-password" placeholder="••••••••">
+      </div>
+
+      <button class="btn btn-primary btn-block" id="btn-login">Entrar no painel</button>
+
+      <p class="tiny-print">
+        Só quem organiza o encontro precisa entrar aqui.<br>
+        Participantes usam a página inicial.
+      </p>
+      <p class="center"><a href="index.html">Voltar para o jogo</a></p>
+    </div>
+  </main>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
