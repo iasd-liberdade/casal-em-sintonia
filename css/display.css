@@ -351,3 +351,82 @@
 .final-name { font-size: clamp(2.6rem, 7.4vw, 7rem); line-height: 1; }
 .final-points { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 4rem); color: var(--gold); font-weight: 800; }
 .final-crown { font-size: clamp(3rem, 7vw, 7rem); animation: bob 2s ease-in-out infinite; }
+
+/* ---------------------------------------------------------
+   Pódio final com a lista completa
+   --------------------------------------------------------- */
+.podium-stage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  gap: clamp(12px, 1.8vw, 34px);
+  margin: clamp(10px, 1.4vw, 24px) auto 0;
+  width: min(100%, 1200px);
+}
+
+.pod { display: grid; justify-items: center; gap: clamp(4px, .5vw, 10px); }
+
+.pod-medal { font-size: clamp(1.8rem, 3.4vw, 3.6rem); }
+
+.pod-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1rem, 1.9vw, 2.1rem);
+  text-align: center;
+  line-height: 1.1;
+}
+
+.pod-points { font-family: var(--font-display); font-weight: 800; color: var(--gold); font-size: clamp(.95rem, 1.6vw, 1.8rem); }
+
+.pod-block {
+  width: 100%;
+  border-radius: clamp(12px, 1.4vw, 22px) clamp(12px, 1.4vw, 22px) 0 0;
+  border: 1px solid var(--stroke);
+  border-bottom: none;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3vw, 3.2rem);
+  color: rgba(255, 255, 255, .55);
+  transform-origin: bottom center;
+  animation: pod-grow 900ms cubic-bezier(.2, .9, .3, 1) both;
+}
+
+.pod-1 .pod-block { height: clamp(120px, 17vh, 230px); background: linear-gradient(180deg, rgba(255, 200, 87, .5), rgba(255, 200, 87, .12)); border-color: rgba(255, 200, 87, .55); animation-delay: .9s; }
+.pod-2 .pod-block { height: clamp(90px, 12.5vh, 170px); background: linear-gradient(180deg, rgba(226, 232, 240, .4), rgba(226, 232, 240, .08)); animation-delay: .45s; }
+.pod-3 .pod-block { height: clamp(70px, 10vh, 135px); background: linear-gradient(180deg, rgba(251, 146, 60, .4), rgba(251, 146, 60, .08)); animation-delay: 0s; }
+
+.pod-1 { animation: pod-fade 600ms both .9s; }
+.pod-2 { animation: pod-fade 600ms both .45s; }
+.pod-3 { animation: pod-fade 600ms both 0s; }
+
+@keyframes pod-grow { from { transform: scaleY(.04); } to { transform: scaleY(1); } }
+@keyframes pod-fade { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+.final-rest {
+  display: grid;
+  gap: clamp(6px, .7vw, 12px);
+  margin-top: clamp(14px, 1.8vw, 30px);
+  align-content: start;
+  overflow: hidden;
+  animation: pod-fade 700ms both 1.5s;
+}
+
+.final-rest.two-col { grid-template-columns: 1fr 1fr; column-gap: clamp(16px, 2vw, 34px); }
+
+.rest-row {
+  display: grid;
+  grid-template-columns: clamp(38px, 3.4vw, 62px) 1fr auto;
+  align-items: center;
+  gap: clamp(8px, 1vw, 18px);
+  padding: clamp(6px, .7vw, 12px) clamp(12px, 1.3vw, 22px);
+  border-radius: clamp(10px, 1.2vw, 16px);
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  font-size: clamp(.9rem, 1.5vw, 1.7rem);
+  font-weight: 700;
+}
+
+.rest-row .pos { font-family: var(--font-display); font-weight: 800; color: var(--ink-mute); text-align: center; }
+.rest-row .pts { font-family: var(--font-display); font-weight: 800; color: var(--gold); }

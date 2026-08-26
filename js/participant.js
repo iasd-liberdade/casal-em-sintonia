@@ -1,4 +1,5 @@
 import {
+  orderedQuestions,
   ensureAnonymousAuth,
   joinGame,
   choosePartner,
@@ -249,10 +250,32 @@ function renderQuestionScreen() {
   }
 }
 
+/** A rodada encerrada foi a última pergunta da lista? */
+function ehUltimaPergunta() {
+  const lista = orderedQuestions(state.questions);
+  const atual = state.game?.currentQuestionId;
+  return Boolean(lista.length && atual && lista[lista.length - 1].id === atual);
+}
+
 function renderResultScreen() {
   const result = state.results?.[state.coupleId];
   const hero = $('#result-hero');
   hero.classList.remove('sync', 'out', 'none');
+
+  // Na última pergunta ninguém vê pontos: a revelação é no telão.
+  if (ehUltimaPergunta()) {
+    hero.classList.add('none');
+    $('#result-emoji').textContent = '🏁';
+    $('#result-title').textContent = 'Chegamos ao fim!';
+    $('#result-sub').textContent = 'Era a última pergunta. O resultado sai agora no telão.';
+    $('#result-points').textContent = '';
+    $('#result-position').textContent = 'Olhem para a frente 👀';
+    show($('#result-total-card'), false);
+    $('#pulse-line').classList.remove('in-sync');
+    return;
+  }
+
+  show($('#result-total-card'), true);
 
   if (!result || result.status === ROUND_STATUS.INCOMPLETE) {
     hero.classList.add('none');

@@ -6,6 +6,7 @@ import {
   watchRoundProgress,
   watchRoundSummary,
   watchConnection,
+  orderedQuestions,
   serverNow
 } from './firebase-service.js';
 import { GAME_STATUS, countFinishedCouples } from './game.js';
@@ -43,7 +44,9 @@ const states = {
   question: $('#d-question'),
   results: $('#d-results'),
   ranking: $('#d-ranking'),
-  final: $('#d-final')
+  endgame: $('#d-endgame'),
+  final: $('#d-final'),
+  finalBoard: $('#d-final-board')
 };
 
 function showState(key) {
@@ -239,6 +242,13 @@ function clockLoop() {
   requestAnimationFrame(clockLoop);
 }
 
+/** A rodada que acabou era a última pergunta ativa da lista? */
+function ehUltimaPergunta() {
+  const lista = orderedQuestions(state.questions);
+  const atual = state.game?.currentQuestionId;
+  return Boolean(lista.length && atual && lista[lista.length - 1].id === atual);
+}
+
 /* ---------------------------------------------------------
    Estado 3 — resultado da rodada
    --------------------------------------------------------- */
@@ -332,8 +342,48 @@ async function playFinal() {
     $('#d-final-points').textContent = `🏆 ${formatPoints(couple.score)} pontos`;
 
     if (item.index === 0) confetti(9000);
-    await sleep(item.index === 0 ? 1000 : 4200);
+    await sleep(item.index === 0 ? 9600 : 4200);
   }
+
+  // Confetes terminaram: entra o pódio com o ranking completo.
+  showState('finalBoard');
+  renderFinalBoard();
+}
+
+function renderFinalBoard() {
+  const ranking = rankCouples(state.couples);
+  const podio = ranking.slice(0, 3);
+  const demais = ranking.slice(3);
+  const medalhas = ['🥇', '🥈', '🥉'];
+
+  // A ordem visual do pódio é 2º, 1º, 3º.
+  const stage = $('#d-podium-stage');
+  stage.innerHTML = [1, 0, 2]
+    .filter((index) => podio[index])
+    .map((index) => {
+      const couple = podio[index];
+      return `
+        <div class="pod pod-${index + 1}">
+          <div class="pod-medal">${medalhas[index]}</div>
+          <div class="pod-name">${escapeHtml(couple.coupleName)}</div>
+          <div class="pod-points">${formatPoints(couple.score)} pts</div>
+          <div class="pod-block">${index + 1}º</div>
+        </div>`;
+    })
+    .join('');
+
+  const rest = $('#d-final-rest');
+  rest.classList.toggle('two-col', demais.length > 6);
+  rest.innerHTML = demais
+    .map(
+      (couple, index) => `
+        <div class="rest-row">
+          <span class="pos">${index + 4}º</span>
+          <span class="name">${escapeHtml(couple.coupleName)}</span>
+          <span class="pts">${formatPoints(couple.score)} pts</span>
+        </div>`
+    )
+    .join('');
 }
 
 /* ---------------------------------------------------------
@@ -364,6 +414,10 @@ function render() {
       if (game.showRanking) {
         showState('ranking');
         renderRanking();
+      } else if (ehUltimaPergunta()) {
+        // Na última pergunta o pódio da rodada fica guardado: nada de
+        // entregar o resultado antes da revelação final.
+        showState('endgame');
       } else {
         showState('results');
         renderResults();
@@ -371,6 +425,8 @@ function render() {
       break;
 
     case GAME_STATUS.FINAL:
+      // Depois da revelação a tela fica no pódio; não voltar para o suspense.
+      if (state.screen === 'finalBoard') break;
       showState('final');
       playFinal();
       break;
